@@ -1,34 +1,36 @@
+
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Home from './pages/home/Home'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const Bgback = localStorage.getItem('bgpic')
+  const [bg, setBg] = useState(Bgback || 'bg.png')
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)), url(${bg})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed'
+    }} className='p-4 h-screen flex items-center justify-center'>
+      <button onClick={() => {
+        if (bg === 'bg.png') {
+          setBg('bg1.jpg')
+          localStorage.setItem('bgpic', 'bg1.jpg')
+        } else if (bg === 'bg1.jpg') {
+          setBg('bg2.jpg')
+          localStorage.setItem('bgpic', 'bg2.jpg')
+        } else if (bg === 'bg2.jpg') {
+          setBg('bg.png')
+          localStorage.setItem('bgpic', 'bg.png')
+        }
+      }} style={{ position: 'absolute', top: '10px', left: '10px' }} className="btn btn-ghost">change </button>
+      <Home />
+
+    </div>
+
   )
 }
 
