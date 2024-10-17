@@ -2,10 +2,16 @@
 import { useState } from 'react'
 import './App.css'
 import Home from './pages/home/Home'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import Login from './pages/login/login'
+import Signup from './pages/signup/SignUp'
+import { useAuthContext } from './context/AthuContext'
+
 
 function App() {
   const Bgback = localStorage.getItem('bgpic')
   const [bg, setBg] = useState(Bgback || 'bg.png')
+  const { AthuUser } = useAuthContext()
 
   return (
     <div style={{
@@ -23,11 +29,20 @@ function App() {
           setBg('bg2.jpg')
           localStorage.setItem('bgpic', 'bg2.jpg')
         } else if (bg === 'bg2.jpg') {
+          setBg('bg3.jpg')
+          localStorage.setItem('bgpic', 'bg3.jpg')
+        } else {
           setBg('bg.png')
           localStorage.setItem('bgpic', 'bg.png')
         }
       }} style={{ position: 'absolute', top: '10px', left: '10px' }} className="btn btn-ghost">change </button>
-      <Home />
+
+      <Routes>
+        <Route path='/' element={AthuUser ? <Home /> : <Navigate to={'/login'} />} />
+        <Route path='/login' element={AthuUser ? <Navigate to={'/'} /> : <Login />} />
+
+        <Route path='/signup' element={AthuUser ? <Navigate to={'/'} /> : <Signup />} />
+      </Routes>
 
     </div>
 

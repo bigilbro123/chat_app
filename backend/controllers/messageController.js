@@ -41,7 +41,7 @@ export const sendMessage = async (req, res) => {
 
         // Send success response
         res.status(201).json({
-            message: 'Message sent successfully'
+            message: newMessage?.message
         });
 
     } catch (error) {
@@ -55,25 +55,31 @@ export const getMessage = async (req, res) => {
         const { receiverId } = req.params;
         const senderId = req.user._id;
 
-        // Correct typo: conversation instead of coversation
-        const conversation = await Conversation.findOne({
-            participants: {
-                $all: [senderId, receiverId]
-            }
-        }).populate('message'); // Ensure 'message' is set as a reference in the schema
+        // Find an existing conversation between sender and receiver
+        let conversation = await Conversation.findOne({
+            participants: { $all: [senderId, receiverId] }
+        }).populate('message'); // Assuming 'message' is referenced in the schema
 
-        // Check if the conversation exists
+        // If no conversation is found, create a new one
         if (!conversation) {
-            return res.status(404).json({
-                message: 'Conversation not found'
+            conversation = await Conversation.create({
+                participants: [senderId, receiverId]
+            });
+            await conversation.save()
+
+            return res.status(201).json({
+                message: 'New conversation created',
+                conversation
             });
         }
-        const conversations = conversation.message
 
-        res.status(200).json(conversations);
+        // Return the messages in the existing conversation
+        const messages = conversation.message;
+
+        res.status(200).json(messages);
 
     } catch (error) {
         console.log(error);
-        res.status(500).json('internal server error');
+        res.status(500).json('Internal server error');
     }
 };

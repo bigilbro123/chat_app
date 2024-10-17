@@ -5,11 +5,16 @@ import messageRoute from './routes/messageRoutes.js';
 import userRoute from './routes/userRoute.js'
 import connectToMongoDB from './db/connectTOMongoDB.js';
 import cookieParser from 'cookie-parser';
-
+import cors from 'cors';
 const app = express();
 
 // Load environment variables
 dotenv.config();
+
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow your frontend origin
+    credentials: true, // Include credentials if needed (cookies, etc.)
+}));
 
 // Middlewares
 app.use(express.json());

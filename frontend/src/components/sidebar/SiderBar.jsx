@@ -5,12 +5,14 @@ import SearchInput from "./SearchInput"
 
 const SiderBar = () => {
     return (
-        <div>
+        <div className="relative overflow-y-scroll">
             <SearchInput />
 
-            <div className="divider px-3  "></div>
+            <div className="divider px-3 "></div>
             <Conversations />
-            <LogoutButton />
+            <div className="fixed z-10 bottom-0 w-fit p-4 bg-gray-600 rounded">
+                <LogoutButton />
+            </div>
         </div>
     )
 }

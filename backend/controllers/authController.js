@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt'
 import generateTokenAndSetCookie from "../utils/genrentToken.js"
 export const singup = async (req, res) => {
     try {
-        const { fullName, userName, password, confirmpassword, gender } = req.body
-        if (password !== confirmpassword) {
+        const { fullName, userName, password, confirmPassword, gender } = req.body
+        if (password !== confirmPassword) {
             return res.status(400).json({
                 error: 'password not match'
             })

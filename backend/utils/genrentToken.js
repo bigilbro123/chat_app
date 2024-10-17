@@ -5,16 +5,16 @@ const generateTokenAndSetCookie = (userId, res) => {
         expiresIn: '15d' // Token valid for 15 days
     });
 
-    // Log the token for debugging purposes (optional)
-    // Remove this in production for security
+    const cookieOptions = {
+        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+        httpOnly: true, // Prevent access to the cookie via JavaScript
+        sameSite: 'strict', // Allow cross-origin requests (for different origin)
+        secure: process.env.NODE_ENV === 'production', // Set to true in production for HTTPS
+    };
 
     // Set the JWT in an HttpOnly cookie
-    res.cookie('jwt', token, {
-        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in milliseconds
-        httpOnly: true, // Prevent access to the cookie via JavaScript
-        sameSite: 'strict', // Prevent CSRF attacks by only sending cookies to the same site
-        secure: process.env.NODE_ENV !== 'development' // Set to true in production to ensure HTTPS
-    });
+    res.cookie('jwt', token, cookieOptions);
 };
 
 export default generateTokenAndSetCookie;
+
